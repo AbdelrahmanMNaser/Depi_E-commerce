@@ -39,13 +39,13 @@ try {
   });
 
   // Define Routes
-  app.use("/products", productRouter);
-  app.use("/categories", categoryRouter);
-  app.use("/brands", brandRouter);
-  app.use("/users", userRouter);
-  app.use("/reviews", reviewRouter);
-  app.use("/cart", cartRouter);
-  app.use("/orders", OrderRouter);
+  app.use("/api/products", productRouter);
+  app.use("/api/categories", categoryRouter);
+  app.use("/api/brands", brandRouter);
+  app.use("/api/users", userRouter);
+  app.use("/api/reviews", reviewRouter);
+  app.use("/api/cart", cartRouter);
+  app.use("/api/orders", OrderRouter);
 
   // Error handler
   app.use(notFound);
