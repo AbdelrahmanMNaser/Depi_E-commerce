@@ -77,6 +77,41 @@ const deleteProduct = async (req, res, next) => {
   }
 };
 
+// @desc    Get products by status
+const getProductByStatus = async (req, res, next) => {
+  try {
+    const { status } = req.params;
+    const products = await productModel.find({ status });
+    res.status(200).json({ message: `Products with status ${status}`, products });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+// @desc    Toggle featured status of a product
+const toggleFeatured = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const product = await productModel.findById(id);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    product.featured = !product.featured; // Toggle featured status
+    await product.save();
+
+    res.status(200).json({ 
+      message: `Product ${product.featured ? 'marked' : 'unmarked'} as featured`, 
+      product 
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
 // export
 module.exports = {
   createProduct,
@@ -84,4 +119,7 @@ module.exports = {
   getProduct,
   updateProduct,
   deleteProduct,
+  toggleFeatured,
+  getProductByStatus,
+
 };
