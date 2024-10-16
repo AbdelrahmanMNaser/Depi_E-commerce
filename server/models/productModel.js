@@ -43,10 +43,36 @@ const ProductSchema = new mongoose.Schema(
       type: Array,
       default: []
     },
+    status: {
+      type: String,
+      enum: ["Active", "Inactive", "Discontinued"],
+      default: "Active",
+      required: true,
+    },
+    featured: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
+    averageRating: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 5,
+    },
   },
   {
     timestamps: true
   }
 );
 
+ProductSchema.methods.updateStock = function (quantity) {
+  this.stock = quantity;
+  return this.save();
+};
+
+ProductSchema.methods.markAsDiscontinued = function () {
+  this.status = "Discontinued";
+  return this.save();
+};
 module.exports = Product = mongoose.model("Product", ProductSchema);
