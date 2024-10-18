@@ -1,0 +1,43 @@
+* {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+  }
+  .Menu {
+    background-color: white;
+  }
+  
+  #HEADER {
+    background-color: #d2cccc;
+    color: #000000;
+    width: 100vw;
+    height: 60px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    border-radius: 16px;
+  }
+  .container {
+    margin: auto;
+    width: 970px;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  #HEADER .container a {
+    text-decoration: none;
+    color: #ffffff;
+    margin-left: 10px;
+  }
+  #HEADER nav .Menu:visited {
+    color: #ccc6d0;
+  }
+  #HEADER nav a:hover {
+    color: #8d8a8ee8;
+    border-radius: 5px;
+  }
+  #HEADER nav {
+    position: absolute;
+    right: 3px;
+  }
