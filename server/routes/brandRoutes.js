@@ -3,6 +3,7 @@ const router = express.Router();
 
 const {
   getAllBrands,
+  getBrandsByCategory,
   getBrand,
   createBrand,
   updateBrand,
@@ -10,6 +11,7 @@ const {
 } = require("../controllers/brandController");
 
 router.route("/").get(getAllBrands);
+router.route("/category/:categoryId").get(getBrandsByCategory);
 router.route("/:id").get(getBrand);
 router.route("/").post(createBrand);
 router.route("/:id").put(updateBrand);

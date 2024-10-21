@@ -2,14 +2,14 @@ const mongoose = require("mongoose");
 
 const CartSchema = new mongoose.Schema(
   {
-    userID: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
     productList: [
       {
-        productId: {
+        product: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Product",
           required: true,
@@ -22,9 +22,6 @@ const CartSchema = new mongoose.Schema(
         unitPrice: {
           type: Number,
           required: true,
-          default: function () {
-            return this.product.unitPrice;
-          }
         },
       },
     ],
@@ -43,6 +40,8 @@ const CartSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+// pre
 
 // Pre-save middleware to calculate totalPrice and totalPriceAfterTax
 CartSchema.pre("save", function (next) {

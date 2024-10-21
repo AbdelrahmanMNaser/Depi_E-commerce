@@ -1,5 +1,8 @@
 const userModel = require("../models/userModel");
 
+/* <---------------------------- POST APIs --------------------------> */
+
+
 // @desc    Create a user
 const createUser = async (req, res, next) => {
   try {
@@ -11,6 +14,9 @@ const createUser = async (req, res, next) => {
   }
 };
 
+
+/* <---------------------------- GET APIs --------------------------> */
+
 // @desc    Get all users
 const getAllUsers = async (req, res, next) => {
   try {
@@ -20,6 +26,27 @@ const getAllUsers = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Get all vendors (using role)
+const getAllVendors = async (req, res, next) => {
+  try {
+    const vendors = await userModel.find({ role: "vendor" });
+    res.json(vendors);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get all customers (using role)
+const getAllCustomers = async (req, res, next) => {
+  try {
+    const customers = await userModel.find({ role: "customer" });
+    res.json(customers);
+  } catch (error) {
+    next(error);
+  }
+};
+
 
 // @desc    Get a user by ID
 const getUser = async (req, res, next) => {
@@ -32,6 +59,8 @@ const getUser = async (req, res, next) => {
   }
 };
 
+/* <---------------------------- PUT APIs --------------------------> */
+
 // @desc    Update a user by ID
 const updateUser = async (req, res, next) => {
   try {
@@ -43,6 +72,8 @@ const updateUser = async (req, res, next) => {
     next(error);
   }
 };
+
+/* <---------------------------- DELETE APIs --------------------------> */
 
 // @desc    Delete a user by ID
 const deleteUser = async (req, res, next) => {
@@ -59,6 +90,8 @@ const deleteUser = async (req, res, next) => {
 module.exports = {
   createUser,
   getAllUsers,
+  getAllVendors,
+  getAllCustomers,
   getUser,
   updateUser,
   deleteUser,

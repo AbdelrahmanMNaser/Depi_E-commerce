@@ -5,6 +5,7 @@ const connectDB = require("./config/db");
 const cors = require("cors");
 
 // Routes
+const authRouter = require("./routes/authRoutes");
 const userRouter = require("./routes/userRoutes");
 const categoryRouter = require("./routes/categoryRoutes");
 const brandRouter = require("./routes/brandRoutes");
@@ -12,6 +13,7 @@ const productRouter = require("./routes/productRoutes");
 const reviewRouter = require("./routes/reviewRoutes");
 const cartRouter = require("./routes/cartRoutes");
 const OrderRouter = require("./routes/orderRoutes");
+const searchRouter = require("./routes/searchRoute");
 
 // error handler
 const { notFound, errorHandler } = require("./middlewares/errorMiddleware");
@@ -44,8 +46,10 @@ try {
   app.use("/api/brands", brandRouter);
   app.use("/api/users", userRouter);
   app.use("/api/reviews", reviewRouter);
-  app.use("/api/cart", cartRouter);
+  app.use("/api/carts", cartRouter);
   app.use("/api/orders", OrderRouter);
+  app.use("/api/auth", authRouter);
+  app.use("/api/search", searchRouter);
 
   // Error handler
   app.use(notFound);

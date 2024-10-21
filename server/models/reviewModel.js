@@ -16,9 +16,15 @@ const ProductReviewSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    review: {
+    reviewTitle: {
       type: String,
       required: true,
+      maxLength: 50,
+    },
+    reviewText: {
+      type: String,
+      required: true,
+      maxLength: 500
     },
   },
   {

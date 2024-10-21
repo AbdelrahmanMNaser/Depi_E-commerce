@@ -8,17 +8,14 @@ const OrderSchema = new mongoose.Schema(
     },
     productList: [
       {
-        ref: "Product",
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+        },
         quantity: {
           type: Number,
           required: true,
           default: 1,
-        },
-        unitPrice: {
-          type: Number,
-          required: true,
         },
       },
     ],
@@ -30,7 +27,7 @@ const OrderSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    ShippingAddress: {
+    shippingAddress: {
       country: {
         type: String,
         default: function () {
@@ -50,10 +47,16 @@ const OrderSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    status: {
+    paymentStatus: {
+      type: String,
+      default: "Pending",
+      enum : ["Pending", "Paid", "Failed"]
+    },
+    shipmentStatus: {
       type: String,
       required: true,
       default: "Pending",
+      enum : ["Pending", "Shipped", "Delivered", "Cancelled"]
     },
   },
   {
