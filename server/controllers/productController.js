@@ -1,9 +1,15 @@
-const productModel = require("../models/productModel");
+const Product = require("../models/productModel");
+
+const { getFilters } = require("../utils/filter");
+
+const { sortByPrice, sortByBestSelling } = require("../utils/sort");
+
+/* <---------------------------- POST APIs --------------------------> */
 
 // @desc    Create a product
 const createProduct = async (req, res, next) => {
   try {
-    const product = new productModel(req.body);
+    const product = new Product(req.body);
     await product.save();
     res
       .status(201)
@@ -13,14 +19,94 @@ const createProduct = async (req, res, next) => {
   }
 };
 
+/* <---------------------------- GET APIs --------------------------> */
+
 // @desc    Get all products
 const getAllProducts = async (req, res, next) => {
   try {
-    const products = await productModel.find().populate({
-      path: "vendor category brand",
-      select: "name -_id",
+
+    const filters = getFilters(req.query);
+
+    // const sort = {
+    //   ...sortByPrice(req.query),
+    // };
+
+    const products = await Product.find(filters)
+      .populate([
+        {
+          path: "category",
+          select: "name -_id",
+        },
+        {
+          path: "brand",
+          select: "name -_id",
+        },
+        {
+          path: "vendor",
+          select: "name -_id",
+        },
+      ]);
+
+    res.status(200).json({
+      message: "All products",
+      products: products,
+      ProductCount: products.length,
     });
-    res.json({ message: "All products", products: products });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get all products by category
+const getProductsByCategory = async (req, res, next) => {
+  try {
+    const { categoryId } = req.params;
+
+    const filters = getFilters(req.query);    
+
+    sort = {
+      ...sortByPrice(req.query),
+    };
+
+    const products = await Product.find({ category: categoryId, ...filters })
+      .sort(sort)
+      .populate([
+      {
+        path: "category",
+        select: "-_id",
+      },
+      {
+        path: "brand",
+        select: "name -_id",
+      },
+      {
+        path: "vendor",
+        select: "name -_id",
+      },
+      ]);
+    ;
+
+    res.status(200).json({
+      message: `Products Found`,
+      products: products,
+      productCount: products.length
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get  products by vendor
+const getProductsByVendor = async (req, res, next) => {
+  try {
+    const { vendorId } = req.params;
+
+    const products = await Product.find({ vendor: vendorId });
+
+    res.status(200).json({
+      message: `Products Found`,
+      products: products,
+    });
   } catch (error) {
     next(error);
   }
@@ -30,33 +116,35 @@ const getAllProducts = async (req, res, next) => {
 const getProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const product = await productModel
-      .findById(id)
-      .populate("user category brand");
+    const product = await Product.findById(id)
+    .populate([
+      {
+        path: "category",
+        select: "-_id",
+      }
+      ,{
+        path: "brand",
+        select: "name -_id",
+      },
+      {
+        path: "vendor",
+        select: "name -_id",
+      }
+    ]);
+      
     res.status(200).json({ message: "Product found", product: product });
   } catch (error) {
     next(error);
   }
 };
 
-// @desc    Get a product by category
-const getProductByCategory = async (req, res, next) => {
-  try {
-    const { category } = req.params;
-    const product = await productModel
-      .find({ category: category })
-      .populate("user category brand");
-    res.status(200).json({ message: "Product found", product: product });
-  } catch (error) {
-    next(error);
-  }
-};
+/* <---------------------------- PUT APIs --------------------------> */
 
 // @desc    Update a product by ID
 const updateProduct = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const product = await productModel.findByIdAndUpdate(id, req.body);
+    const { productId } = req.params;
+    const product = await Product.findByIdAndUpdate(productId, req.body);
     await product.save();
     res
       .status(200)
@@ -66,11 +154,86 @@ const updateProduct = async (req, res, next) => {
   }
 };
 
+/* <---------------------------- DELETE APIs --------------------------> */
+
+// ================== Helper Function ==================
+const checkOrdersForProducts = async (productIds) => {
+  const orders = await Order.find({ product: { $in: productIds } });
+  return orders.length > 0;
+};
+
+// @desc    Delete  products by category
+const deleteProductsByCategory = async (req, res, next) => {
+  try {
+    const { categoryId } = req.params;
+    const products = await Product.find({ category: categoryId });
+    const productIds = products.map((product) => product._id);
+
+    if (await checkOrdersForProducts(productIds)) {
+      return res
+        .status(400)
+        .json({ message: "Cannot delete products with existing orders" });
+    }
+
+    await Product.deleteMany({ category: categoryId });
+    res.json({ message: "Products deleted successfully", products: products });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Delete  products by brand
+const deleteProductsByBrand = async (req, res, next) => {
+  try {
+    const { brandId } = req.params;
+    const products = await Product.find({ brand: brandId });
+    const productIds = products.map((product) => product._id);
+
+    if (await checkOrdersForProducts(productIds)) {
+      return res
+        .status(400)
+        .json({ message: "Cannot delete products with existing orders" });
+    }
+
+    await Product.deleteMany({ brand: brandId });
+    res.json({ message: "Products deleted successfully", products: products });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Delete  products by vendor
+const deleteProductsByVendor = async (req, res, next) => {
+  try {
+    const { vendorId } = req.params;
+    const products = await Product.find({ vendor: vendorId });
+    const productIds = products.map((product) => product._id);
+
+    if (await checkOrdersForProducts(productIds)) {
+      return res
+        .status(400)
+        .json({ message: "Cannot delete products with existing orders" });
+    }
+
+    await Product.deleteMany({ vendor: vendorId });
+    res.json({ message: "Products deleted successfully", products: products });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // @desc    Delete a product by ID
 const deleteProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const product = await productModel.findByIdAndDelete(id);
+
+    if (await checkOrdersForProducts([id])) {
+      return res
+        .status(400)
+        .json({ message: "Cannot delete product with existing orders" });
+    }
+
+    const product = await Product.findByIdAndDelete(id);
     res.json({ message: "Product deleted successfully", product: product });
   } catch (error) {
     next(error);
@@ -81,7 +244,12 @@ const deleteProduct = async (req, res, next) => {
 module.exports = {
   createProduct,
   getAllProducts,
+  getProductsByCategory,
+  getProductsByVendor,
   getProduct,
   updateProduct,
   deleteProduct,
+  deleteProductsByCategory,
+  deleteProductsByBrand,
+  deleteProductsByVendor,
 };

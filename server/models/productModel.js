@@ -4,36 +4,42 @@ const ProductSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: true
+      required: true,
     },
     description: {
       type: String,
-      required: true
+      required: true,
+      maxLength: 1000,
     },
     category: {
       ref: "Category",
       type: mongoose.Schema.Types.ObjectId,
-      required: true
+      required: true,
+    },
+    subCategory: {
+      ref: "Category.sub_categories",
+      type: mongoose.Schema.Types.ObjectId,
+      required: false,
     },
     vendor: {
       ref: "User",
       type: mongoose.Schema.Types.ObjectId,
-      required: true
+      required: true,
     },
     unitPrice: {
       type: Number,
-      required: true
+      required: true,
     },
     stock: {
       type: Number,
       required: true,
       default: 0,
-      min: 0
+      min: 0,
     },
     brand: {
       ref: "Brand",
       type: mongoose.Schema.Types.ObjectId,
-      required: true
+      required: true,
     },
     colorList: {
       type: Array,
@@ -41,12 +47,34 @@ const ProductSchema = new mongoose.Schema(
     },
     imageURLs: {
       type: Array,
-      default: []
+      default: [],
     },
+    keywords: {
+      type: Array,
+      default: [],
+    },
+    features: [
+      {
+        title: {
+          type: String,
+          required: true,
+          maxLength: 100,
+        },
+        description: {
+          type: String,
+          required: true,
+          maxLength: 300,
+        },
+        imageURL: {
+          type: String,
+          required: false,
+        },
+      },
+    ],
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
-module.exports = Product = mongoose.model("Product", ProductSchema);
+module.exports = mongoose.model("Product", ProductSchema);

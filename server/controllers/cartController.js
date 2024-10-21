@@ -1,4 +1,4 @@
-const cartModel = require("../models/cartModel");
+const Cart = require("../models/cartModel");
 
 // Helper function to add or update quantity
 const addQuantityToProduct = (product, quantity, isUpdate) => {
@@ -9,12 +9,14 @@ const addQuantityToProduct = (product, quantity, isUpdate) => {
   }
 };
 
+/* <---------------------------- POST APIs --------------------------> */
+
 // @desc    Create a cart , ttl expire in 3 days
 const createCart = async (req, res, next) => {
   try {
-    const cart = new cartModel(req.body);
+    const cart = new Cart(req.body);
     await cart.save().then(() => {
-      cartModel.collection.createIndex(
+      Cart.collection.createIndex(
         { createdAt: 1 },
         { expireAfterSeconds: 60 * 60 * 24 * 3 }
       );
@@ -25,14 +27,24 @@ const createCart = async (req, res, next) => {
   }
 };
 
+/* <--------------------------- GET APIs --------------------------> */
+
 // @desc    Get cart by user ID
 const getCart = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const cart = await cartModel.findOne({ userID: id }).populate({
+    const cart = await Cart.findById(id).populate({
       path: "productList.product",
-      select: "title unitPrice -_id",
-      options: { strictPopulate: false }
+      populate: [
+        {
+          path: "category",
+          select: "name",
+        },
+        {
+          path: "brand",
+          select: "name",
+        },
+      ],
     });
     res.status(200).json({ message: "Cart found", cart });
   } catch (error) {
@@ -44,17 +56,27 @@ const getCart = async (req, res, next) => {
 const addProductToCart = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { productID, quantity } = req.body;
-    const cart = await cartModel.findOne({ userID: id });
+    const { productID, quantity, unitPrice } = req.body;
+    const cart = await Cart.findById(id);
+    console.log("productID: ", productID);
+
     const product = cart.productList.find(
-      (product) => product.product == productID
+      (product) => product.product.toString() === productID.toString()
     );
+
+    console.log("check: ", product);
+
     if (product) {
-      addQuantityToProduct(product, quantity, false);
-    } else {
-      cart.productList.push({ product: productID, quantity: quantity });
+      console.log("repetitive");
+      res.status(400).json({ message: "Product already exists in cart" });
     }
-    await cart.save();
+    cart.productList.push({
+      product: productID,
+      quantity: quantity,
+      unitPrice: unitPrice,
+    });
+    await Cart.findByIdAndUpdate(id, cart);
+
     res
       .status(200)
       .json({ message: "Product added to cart successfully", cart });
@@ -63,12 +85,14 @@ const addProductToCart = async (req, res, next) => {
   }
 };
 
+/* <--------------------------- PUT APIs --------------------------> */
+
 // @desc    Update product in cart
 const updateProductInCart = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { productID, quantity } = req.body;
-    const cart = await cartModel.findOne({ userID: id });
+    const cart = await Cart.findOne({ userID: id });
     const product = cart.productList.find(
       (product) => product.product == productID
     );
@@ -84,17 +108,19 @@ const updateProductInCart = async (req, res, next) => {
   }
 };
 
+/* <--------------------------- DELETE APIs --------------------------> */
+
 // @desc    Delete product from cart
 const deleteProductFromCart = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { productID } = req.body;
-    const cart = await cartModel.findOne({ userID: id });
+    const cart = await Cart.findOne({ userID: id });
     cart.productList = cart.productList.filter(
       (product) => product.product != productID
     );
     if (cart.productList.length === 0) {
-      await cartModel.deleteOne({ userID: id });
+      await Cart.deleteOne({ userID: id });
       res.status(200).json({ message: "Cart deleted successfully" });
     } else {
       await cart.save();
@@ -108,12 +134,12 @@ const deleteProductFromCart = async (req, res, next) => {
 };
 
 // @desc    Delete all products from cart
-const deleteAllProductsFromCart = async (req, res, next) => {
+const deleteCart = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const cart = await cartModel.findOne({ userID: id });
+    const cart = await Cart.findById(id);
     cart.productList = [];
-    await cartModel.deleteOne({ userID: id });
+    await Cart.deleteOne({ userID: id });
     res.status(200).json({ message: "Cart deleted successfully" });
   } catch (error) {
     next(error);
@@ -126,5 +152,5 @@ module.exports = {
   addProductToCart,
   updateProductInCart,
   deleteProductFromCart,
-  deleteAllProductsFromCart,
+  deleteCart,
 };
