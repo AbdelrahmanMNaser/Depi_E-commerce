@@ -4,30 +4,31 @@ import Axios from "../../axiosConfig";
 // Initial state
 const initialState = {
   categories: [],
-  currentCategory: null,
+  selectedCategory: null,
+  selectedSubCategory: null,
   status: "idle",
   error: null,
 };
 
-// Async thunks
+// Async thunks for CRUD operations
 export const fetchAllCategories = createAsyncThunk(
-  "categories/fetchAll",
+  "categories/fetchAllCategories",
   async (_, { rejectWithValue }) => {
     try {
       const response = await Axios.get("/categories");
-      return response.data; // returns the full list of categories
+      return response.data.categories;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
   }
 );
 
-export const fetchCategoryById = createAsyncThunk(
-  "categories/fetchById",
+export const fetchCategory = createAsyncThunk(
+  "categories/fetchCategory",
   async (id, { rejectWithValue }) => {
     try {
       const response = await Axios.get(`/categories/${id}`);
-      return response.data; //  returns the category object
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -35,11 +36,11 @@ export const fetchCategoryById = createAsyncThunk(
 );
 
 export const createCategory = createAsyncThunk(
-  "categories/create",
-  async (category, { rejectWithValue }) => {
+  "categories/createCategory",
+  async (newCategory, { rejectWithValue }) => {
     try {
-      const response = await Axios.post("/categories", category);
-      return response.data; //returns the created category
+      const response = await Axios.post("/categories", newCategory);
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -47,11 +48,11 @@ export const createCategory = createAsyncThunk(
 );
 
 export const updateCategory = createAsyncThunk(
-  "categories/update",
-  async ({ id, category }, { rejectWithValue }) => {
+  "categories/updateCategory",
+  async ({ id, updatedCategory }, { rejectWithValue }) => {
     try {
-      const response = await Axios.put(`/categories/${id}`, category);
-      return response.data; // returns the updated category
+      const response = await Axios.put(`/categories/${id}`, updatedCategory);
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -59,11 +60,11 @@ export const updateCategory = createAsyncThunk(
 );
 
 export const deleteCategory = createAsyncThunk(
-  "categories/delete",
+  "categories/deleteCategory",
   async (id, { rejectWithValue }) => {
     try {
       await Axios.delete(`/categories/${id}`);
-      return id; // Return the ID of the deleted category
+      return id;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -71,38 +72,55 @@ export const deleteCategory = createAsyncThunk(
 );
 
 // Slice
-const categoriesSlice = createSlice({
+const categorySlice = createSlice({
   name: "categories",
   initialState,
   reducers: {
-    clearCurrentCategory: (state) => {
-      state.currentCategory = null; // Clear the current category
+    selectCategory: (state, action) => {
+      if (
+        state.selectedCategory &&
+        state.selectedCategory._id === action.payload._id
+      ) {
+        state.selectedCategory = null; // Deselect if the same category is clicked
+      } else {
+        state.selectedCategory = action.payload; // Update selectedCategory
+      }
+    },
+    selectSubCategory: (state, action) => {
+      if (
+        state.selectedSubCategory &&
+        state.selectedSubCategory._id === action.payload._id
+      ) {
+        state.selectedSubCategory = null; // Deselect if the same subcategory is clicked
+      } else {
+        state.selectedSubCategory = action.payload; // Update selectedSubCategory
+      }
     },
   },
   extraReducers: (builder) => {
-    // Fetch all categories
     builder
+      // Fetch all categories
       .addCase(fetchAllCategories.pending, (state) => {
         state.status = "loading";
       })
       .addCase(fetchAllCategories.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.categories = action.payload; // Store the fetched categories
+        state.categories = action.payload;
       })
       .addCase(fetchAllCategories.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || action.error.message;
       })
-      
+
       // Fetch category by ID
-      .addCase(fetchCategoryById.pending, (state) => {
+      .addCase(fetchCategory.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchCategoryById.fulfilled, (state, action) => {
+      .addCase(fetchCategory.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.currentCategory = action.payload; // Store the fetched category
+        state.category = action.payload;
       })
-      .addCase(fetchCategoryById.rejected, (state, action) => {
+      .addCase(fetchCategory.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || action.error.message;
       })
@@ -113,7 +131,7 @@ const categoriesSlice = createSlice({
       })
       .addCase(createCategory.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.categories.push(action.payload); // Add the new category to the state
+        state.categories.push(action.payload);
       })
       .addCase(createCategory.rejected, (state, action) => {
         state.status = "failed";
@@ -130,7 +148,7 @@ const categoriesSlice = createSlice({
           (category) => category.id === action.payload.id
         );
         if (index !== -1) {
-          state.categories[index] = action.payload; // Update the category in the state
+          state.categories[index] = action.payload;
         }
       })
       .addCase(updateCategory.rejected, (state, action) => {
@@ -145,7 +163,7 @@ const categoriesSlice = createSlice({
       .addCase(deleteCategory.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.categories = state.categories.filter(
-          (category) => category.id !== action.payload // Use ID for filtering
+          (category) => category.id !== action.payload
         );
       })
       .addCase(deleteCategory.rejected, (state, action) => {
@@ -155,6 +173,7 @@ const categoriesSlice = createSlice({
   },
 });
 
-export const { clearCurrentCategory } = categoriesSlice.actions;
+export const { selectCategory } = categorySlice.actions; // Export the action
+export const { selectSubCategory } = categorySlice.actions; // Export the action
 
-export default categoriesSlice.reducer;
+export default categorySlice.reducer;
