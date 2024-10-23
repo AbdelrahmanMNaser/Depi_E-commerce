@@ -1,42 +1,17 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Input from '../components/Input';
 import Button from '../components/Button';
+import { signupUser } from '../redux/userSlice';
 
 const SignupPage = () => {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
 
   const handleSignup = () => {
-    const handleSignup = async () => {
-
-      if (!email || !password || !name) {
-        console.error('Please fill in all fields');
-        return;
-      }
-    
-      try {
-        const response = await fetch('https://yourapi.com/signup', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ name, email, password }),
-        });
-    
-        if (!response.ok) {
-          throw new Error('Signup failed');
-        }
-    
-        const data = await response.json();
-        console.log('Signup successful:', data);
-        
-      } catch (error) {
-        console.error('Error during signup:', error);
-      }
-    };
-    
-    console.log('Signing up with', { email, password, name });
+    dispatch(signupUser({ email, password, name }));
   };
 
   return (
