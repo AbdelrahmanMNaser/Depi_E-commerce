@@ -12,6 +12,7 @@ const LoginPage = () => {
 
   const handleLogin = () => {
     dispatch(loginUser({ email, password }));
+    
   };
 
   return (
