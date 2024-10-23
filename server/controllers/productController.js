@@ -35,15 +35,15 @@ const getAllProducts = async (req, res, next) => {
       .populate([
         {
           path: "category",
-          select: "name -_id",
+          select: "name",
         },
         {
           path: "brand",
-          select: "name -_id",
+          select: "name",
         },
         {
           path: "vendor",
-          select: "name -_id",
+          select: "name",
         },
       ]);
 
@@ -64,24 +64,19 @@ const getProductsByCategory = async (req, res, next) => {
 
     const filters = getFilters(req.query);    
 
-    sort = {
-      ...sortByPrice(req.query),
-    };
-
     const products = await Product.find({ category: categoryId, ...filters })
-      .sort(sort)
       .populate([
       {
         path: "category",
-        select: "-_id",
+        select: "name",
       },
       {
         path: "brand",
-        select: "name -_id",
+        select: "name",
       },
       {
         path: "vendor",
-        select: "name -_id",
+        select: "name",
       },
       ]);
     ;
@@ -120,15 +115,15 @@ const getProduct = async (req, res, next) => {
     .populate([
       {
         path: "category",
-        select: "-_id",
+        select: "name",
       }
       ,{
         path: "brand",
-        select: "name -_id",
+        select: "name",
       },
       {
         path: "vendor",
-        select: "name -_id",
+        select: "name",
       }
     ]);
       

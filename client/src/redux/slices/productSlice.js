@@ -4,6 +4,7 @@ import Axios from "../../axiosConfig";
 // Initial state
 const initialState = {
   products: [],
+  product: null,
   status: "idle",
   error: null,
 };
@@ -50,7 +51,7 @@ export const fetchProductsByCategory = createAsyncThunk(
   async (categoryId, { rejectWithValue }) => {
     try {
       const response = await Axios.get(`/products/category/${categoryId}`);
-      return response.data;
+      return response.data.products;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -97,7 +98,13 @@ export const deleteProduct = createAsyncThunk(
 const productSlice = createSlice({
   name: "products",
   initialState,
-  reducers: {},
+  reducers: {
+    resetProductsState: (state) => {
+      state.products = [];
+      state.status = "idle";
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
 
@@ -200,5 +207,7 @@ const productSlice = createSlice({
       });
   },
 });
+
+export const { resetProductsState } = productSlice.actions; // Export the reset action
 
 export default productSlice.reducer;
