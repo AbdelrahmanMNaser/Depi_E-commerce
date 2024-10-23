@@ -1,16 +1,16 @@
 import React from 'react'
 import Products from './pages/Products'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import NavbarDemo from './components/NavbarDemo'
 
 const Routing = () => {
   return (
-    <BrowserRouter>
-    <NavbarDemo />
-      <Routes>
+    <Routes>
         <Route path='/products' element={<Products />} />
-      </Routes>
-    </BrowserRouter>
+        {/* <Route path="/" element={<HomePage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/categories/:id" element={<CategoryPage />} /> */}
+    </Routes>
+
 
   )
 }
