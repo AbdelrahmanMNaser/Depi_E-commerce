@@ -5,6 +5,7 @@ import store from "./redux/store";
 import { BrowserRouter as Router } from "react-router-dom";
 import Header from "./components/Header";
 import CartPage from "./components/CartPage";
+import CheckoutPage from './pages/CheckoutPage';
 
 function App() {
   return (

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CartProductList = ({ cartItems, onAdd, onRemove }) => {
+const CartProductList = ({ cartItems, onAdd, onRemove, onRemoveCompletely }) => {
   return (
     <div className="w-full lg:w-3/4 p-4 bg-white shadow-md rounded-lg">
       {cartItems.map((item) => (
@@ -21,6 +21,12 @@ const CartProductList = ({ cartItems, onAdd, onRemove }) => {
                 onClick={() => onAdd(item)}
               >
                 +
+              </button>
+              <button
+                className="bg-red-600 text-white px-2 py-1 rounded-md ml-4"
+                onClick={() => onRemoveCompletely(item)}
+              >
+                Remove
               </button>
             </div>
           </div>

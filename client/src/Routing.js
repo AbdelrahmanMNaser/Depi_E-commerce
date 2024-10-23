@@ -2,6 +2,7 @@ import React from 'react'
 import Products from './pages/Products'
 import { Route, Routes } from 'react-router-dom'
 import CartPage from './components/CartPage';
+import CheckoutPage from './pages/CheckoutPage'
 
 const Routing = () => {
   return (
@@ -11,6 +12,7 @@ const Routing = () => {
         <Route path='/:CategoryName' element={<Products />} />
          {/* Add CartPage Route */}
         <Route path='/cart' element={<CartPage />} />
+        <Route path='/checkout' element={<CheckoutPage />} />
         {/* <Route path="/" element={<HomePage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/categories/:id" element={<CategoryPage />} /> */}

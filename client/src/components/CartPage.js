@@ -26,10 +26,24 @@ const CartPage = () => {
     );
   };
 
+  const handleRemoveCompletely = (item) => {
+    setCartItems((prevItems) => prevItems.filter((i) => i.id !== item.id));
+  };
+
   const totalPrice = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
+
+  const totalItems = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
+
+  const handleCheckout = () => {
+    // Handle checkout logic here, e.g., navigate to the checkout page
+    console.log('Proceeding to checkout...');
+  };
 
   return (
     <div className="container mx-auto p-6 flex flex-col lg:flex-row">
@@ -37,8 +51,13 @@ const CartPage = () => {
         cartItems={cartItems}
         onAdd={handleAdd}
         onRemove={handleRemove}
+        onRemoveCompletely={handleRemoveCompletely}
       />
-      <CartSummary totalPrice={totalPrice} />
+      <CartSummary 
+        totalPrice={totalPrice} 
+        totalItems={totalItems} 
+        onCheckout={handleCheckout} 
+      />
     </div>
   );
 };
