@@ -26,3 +26,7 @@ code {
   padding: 2px 4px;
   border-radius: 4px; 
 }
+
+button {
+  width: 100%; /* Make button take full width of the parent */
+}
