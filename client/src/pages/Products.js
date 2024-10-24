@@ -5,7 +5,7 @@ import {
   resetProductsState,
   fetchAllProducts,
   fetchProductsByCategory,
-} from "../redux/slices/ProductSlice";
+} from "../redux/slices/productSlice";
 import ProductCard from "../components/ProductCard";
 import Loading from "../components/Loading";
 

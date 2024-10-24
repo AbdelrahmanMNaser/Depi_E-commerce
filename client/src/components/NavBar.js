@@ -6,7 +6,7 @@ import {
   fetchAllCategories,
   selectCategory,
   selectSubCategory,
-} from "../redux/slices/CategoriesSlice";
+} from "../redux/slices/categoriesSlice";
 
 const NavBar = () => {
   const dispatch = useDispatch();
@@ -32,7 +32,7 @@ const NavBar = () => {
   return (
     <div className="flex justify-between items-center bg-gray-200 p-4">
       <div className="flex space-x-9">
-        <Link to="/" className="hover:{bg-yellow-500 text-blue-500} text-black">
+        <Link to="/ " className="hover:underline text-black">
           Home
         </Link>
         <Link to="/" className="hover:underline text-black">
@@ -49,9 +49,9 @@ const NavBar = () => {
             <div className="absolute left-0 bg-red-100 p-2">{error}</div>
           )}
           {status === "succeeded" && (
-            <ul className="absolute left-0 hidden group-hover:block bg-white shadow-md rounded-md mt-2">
+            <ul className="absolute left-0 hidden group-onclick:block bg-white shadow-md rounded-md mt-2">
               {categories.map((category) => (
-                <li key={category._id} className="px-4 py-2 hover:bg-gray-100">
+                <li key={category._id} className="px-4 py-2 onclick:bg-gray-100">
                   <div className="relative group">
                     <Link
                       to={`/${category.name}`} // Use category name here
@@ -66,7 +66,7 @@ const NavBar = () => {
                           {category.sub_categories.map((sub) => (
                             <li
                               key={sub.id}
-                              className="px-4 py-2 hover:bg-gray-100"
+                              className="px-4 py-2 onclick:bg-gray-100"
                             >
                               <Link
                                 to={`/categories/${category.name}/${sub.name}`} // Use subcategory name here
