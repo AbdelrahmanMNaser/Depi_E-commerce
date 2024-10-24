@@ -1,27 +1,15 @@
 import { useState } from 'react';
-import { Dialog } from '@headlessui/react';
-import { XMarkIcon, StarIcon } from '@heroicons/react/20/solid';
-
-const product = {
-  name: 'Product Name',
-  price: '$69',
-  rating: 4.9,
-  reviewCount: 234,
-  href: '#',
-  imageSrc: 'https://tailwindui.com/plus/img/ecommerce-images/product-quick-preview-02-detail.jpg',
-  imageAlt: 'Image Alt Text',
-  description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.',
-};
+import { StarIcon } from '@heroicons/react/20/solid';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function ProductDetailsHead() {
+export default function ProductDetailsHead({product}) {
   const [quantity, setQuantity] = useState(1);
   
   return (
-    <div className="fixed top-0 inset-x-0 flex items-start justify-center mt-4">
+    <div className="top-0 inset-x-0 flex items-start justify-center mt-4">
       <div className="flex w-full max-w-6xl justify-center">
         <div className="flex-shrink-0 overflow-hidden rounded-lg bg-gray-100 h-100 w-80">
           <img alt={product.imageAlt} src={product.imageSrc} className="object-cover object-center w-full h-full" />
