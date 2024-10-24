@@ -12,9 +12,23 @@ const initialState = {
 // Async thunks for CRUD operations
 export const fetchAllReviews = createAsyncThunk(
   "reviews/fetchAllReviews",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await Axios.get(`/reviews/`);
+      return response.data.reviews;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const fetchReviewsByProduct = createAsyncThunk(
+  "reviews/fetchReviewsByProduct",
   async (productId, { rejectWithValue }) => {
     try {
       const response = await Axios.get(`/reviews/products/${productId}`);
+      console.log("API response", response.data.reviews);
+      
       return response.data.reviews;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -94,9 +108,25 @@ const reviewSlice = createSlice({
       })
       .addCase(fetchAllReviews.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.categories = action.payload;
+        state.reviews = action.payload;
       })
       .addCase(fetchAllReviews.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || action.error.message;
+      })
+
+      // Fetch Reviews by Product
+      .addCase(fetchReviewsByProduct.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchReviewsByProduct.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.reviews = action.payload;
+        
+        console.log("Reviews from Slice", state.reviews);
+        
+      })
+      .addCase(fetchReviewsByProduct.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || action.error.message;
       })
@@ -107,7 +137,7 @@ const reviewSlice = createSlice({
       })
       .addCase(fetchReview.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.category = action.payload;
+        state.review = action.payload;
       })
       .addCase(fetchReview.rejected, (state, action) => {
         state.status = "failed";
@@ -120,7 +150,7 @@ const reviewSlice = createSlice({
       })
       .addCase(createReview.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.categories.push(action.payload);
+        state.reviews.push(action.payload);
       })
       .addCase(createReview.rejected, (state, action) => {
         state.status = "failed";
@@ -151,7 +181,7 @@ const reviewSlice = createSlice({
       })
       .addCase(deleteReview.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.categories = state.categories.filter(
+        state.review = state.reviews.filter(
           (review) => review.id !== action.payload
         );
       })

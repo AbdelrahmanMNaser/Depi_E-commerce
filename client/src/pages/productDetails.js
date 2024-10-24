@@ -1,34 +1,67 @@
-import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import FeaturesComponent from './../components/ProductFeatures';
-import ProductDetailsHead from './../components/ProductDetailsHead';
-import ProductList from './../components/ProductList';
-import Reviews from './../components/Reviews';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
+import {
+  fetchAllProducts,
+  fetchProductById,
+} from "../redux/slices/ProductSlice";
+import { fetchReviewsByProduct } from "../redux/slices/ReviewSlice";
+
+import ProductInfo from "./../components/ProductInfo";
+import ProductFeatures from "../components/ProductFeatures";
+import ProductSimilar from "./../components/ProductSimilar";
+import Reviews from "./../components/Reviews";
 
 const ProductDetails = () => {
+  const dispatch = useDispatch();
   const location = useLocation();
-  const { product } = location.state? location.state : {
-    name: 'Product Name',
-    price: '$69',
-    rating: 4.9,
-    reviewCount: 234,
-    href: '#',
-    imageSrc: 'https://tailwindui.com/plus/img/ecommerce-images/product-quick-preview-02-detail.jpg',
-    imageAlt: 'Image Alt Text',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.',
-  };
+  const {
+    products = [],
+    status,
+    error,
+  } = useSelector((state) => state.products);
+  const { ProductName } = useParams();
+
+  useEffect(() => {
+    dispatch(fetchAllProducts());
+  }, [dispatch]);
+
+  const product = products.find((product) => product.title === ProductName);
+
+  useEffect(() => {
+    if (product) {
+      dispatch(fetchProductById(product._id));
+    }
+  }, [dispatch, product]);
+
+  const {
+    reviews = [],
+    reviewsStatus,
+    reviewsError,
+  } = useSelector((state) => state.reviews.reviews);
+
+  useEffect(() => {
+    if (product) {
+      dispatch(fetchReviewsByProduct(product._id));
+    }
+  }, [dispatch, product]);
+
+  console.log("reviews", reviews);
+  
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
 
-  return(
+  return (
     <>
-        <ProductDetailsHead product =  {product}/>
-        <FeaturesComponent />
-        <Reviews />
-        <ProductList />
-        </>
-  )
-}
+      <ProductInfo product={product} />
+      <ProductFeatures product={product} />
+      <Reviews reviews={reviews} />
+      <ProductSimilar />
+    </>
+  );
+};
 export default ProductDetails;

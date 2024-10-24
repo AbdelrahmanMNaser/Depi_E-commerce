@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   resetProductsState,
@@ -85,7 +85,9 @@ function Products() {
           <div className="flex flex-wrap -m-2">
             {filteredProducts.length > 0 ? (
               filteredProducts.map((product) => (
+                <Link to={`/products/${product.title}`} >
                 <ProductCard key={product._id} product={product} />
+                </Link>
               ))
             ) : (
               <div>No products available</div>
