@@ -1,67 +1,7 @@
 import React, { useRef } from 'react'
 import ProductCard from './CardNew'; // Adjust the import path as needed
 
-const products = [
-  {
-    id: 1,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Black',
-  },
-  {
-    id: 2,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-02.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Black',
-  },
-  {
-    id: 3,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-03.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Black',
-  },
-  {
-    id: 4,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-04.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Black',
-  },
-  {
-    id: 5,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/plus/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Black',
-  },
-  {
-    id: 6,
-    name: 'Product Name',
-    price: '$69',
-    rating: 4.9,
-    reviewCount: 234,
-    href: '#',
-    imageSrc: 'https://tailwindui.com/plus/img/ecommerce-images/product-quick-preview-02-detail.jpg',
-    imageAlt: 'Image Alt Text',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.',
-  }
-  // More products...
-];
-
-export default function ProductList() {
+export default function ProductList({products}) {
     const scrollContainerRef = useRef(null);
   
     const handleScroll = (direction) => {

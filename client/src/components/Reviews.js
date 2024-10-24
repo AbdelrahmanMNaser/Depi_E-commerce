@@ -1,24 +1,6 @@
 import React from 'react';
 
-const reviews = [
-    {
-      user: "Emily Selman",
-      rating: 5,
-      reviewText: "This is the bag of my dreams. I took it on my last vacation and was able to fit an absurd amount of snacks for the many long and hungry flights."
-    },
-    {
-      user: "Hector Gibbons",
-      rating: 3,
-      reviewText: "Before getting the Ruck Snack, I struggled my whole life with pulverized snacks, endless crumbs, and other heartbreaking snack catastrophes. Now, I can stow my snacks with confidence and style!"
-    },
-    {
-      user: "Mark Edwards",
-      rating: 4,
-      reviewText: "I love how versatile this bag is. It can hold anything ranging from cookies that come in trays to cookies that come in tins."
-    }
-  ];
-
-const Reviews = () => {
+const Reviews = ({reviews}) => {
 
   const calculateRatingDistribution = () => {
     const totalReviews = reviews.length;
