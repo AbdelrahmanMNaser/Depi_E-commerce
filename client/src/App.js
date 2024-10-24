@@ -12,9 +12,11 @@ function App() {
     <Provider store={store}>
       <Router>
         <Header />
-        <h1 className="text-center text-green-600">DEPI E-Commerce</h1>
+        <main>
+          <h1 className="text-center text-green-600">DEPI E-Commerce</h1>
+          <Routing />
+        </main>
         <Footer />
-        <Routing />
       </Router>
     </Provider>
   );

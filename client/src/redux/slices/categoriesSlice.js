@@ -1,6 +1,35 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Axios from "../../axiosConfig";
 
+const mockCategories = [
+  {
+    _id: "1",
+    name: "Electronics",
+    imageURL: "https://via.placeholder.com/150",
+    sub_categories: [
+      { id: "1-1", name: "Phones" },
+      { id: "1-2", name: "Laptops" },
+    ],
+  },
+  {
+    _id: "2",
+    name: "Clothing",
+    imageURL: "https://via.placeholder.com/150",
+    sub_categories: [
+      { id: "2-1", name: "Men's Wear" },
+      { id: "2-2", name: "Women's Wear" },
+    ],
+  },
+  {
+    _id: "3",
+    name: "Furniture",
+    imageURL: "https://via.placeholder.com/150",
+    sub_categories: [
+      { id: "3-1", name: "Sofas" },
+      { id: "3-2", name: "Tables" },
+    ],
+  },
+];
 // Initial state
 const initialState = {
   categories: [],

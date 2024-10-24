@@ -89,17 +89,11 @@ const NavBar = () => {
 
       <div className="ml-auto flex space-x-9">
         <Link
-          to="/Log-in"
-          className="hover:underline text-black p-2 rounded-md hover:bg-gray-200 transition duration-300"
-        >
-          Log in
+          to="/support"
+          className="hover:underline text-black p-2 rounded-md hover:bg-gray-200 transition duration-300">
+          Support
         </Link>
-        <Link
-          to="/Sign-up"
-          className="hover:underline text-black p-2 rounded-md hover:bg-gray-200 transition duration-300"
-        >
-          Sign up
-        </Link>
+        
       </div>
     </div>
   );
