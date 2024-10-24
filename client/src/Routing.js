@@ -8,7 +8,10 @@ const Routing = () => {
     
     <Routes>
         <Route path='/products' element={<Products />} />
+        {/* <Route path='/:ProductName' element={<ProductDetails />} /> */}
+        <Route path='/search' element={<Products />} />
         <Route path='/:CategoryName' element={<Products />} />
+        <Route path='/:SubCategoryName' element={<Products />} />
          {/* Add CartPage Route */}
         <Route path='/cart' element={<CartPage />} />
         {/* <Route path="/" element={<HomePage />} />

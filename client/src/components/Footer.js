@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllCategories } from "../redux/slices/categoriesSlice";
+import { fetchAllCategories, selectSubCategory } from "../redux/slices/CategoriesSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebookF, faTwitter, faInstagram } from "@fortawesome/free-brands-svg-icons";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const dispatch = useDispatch();
@@ -16,8 +17,12 @@ const Footer = () => {
     }
   }, [dispatch, status]);
 
+  const handleSubCategoryClick = (sub) => {
+    dispatch(selectSubCategory(sub)); // Dispatch selectSubCategory action
+  }
+
   return (
-    <footer className="bg-gray-800 text-white py-10 md:py-14 fixed inset-x-0 bottom-0">
+    <footer className="bg-gray-700 text-white py-4 md:py-6 inset-x-0 bottom-0">
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 px-4 md:px-0">
         {/* Logo */}
         <div className="text-center md:text-left">
@@ -33,14 +38,19 @@ const Footer = () => {
           {status === "failed" && <p>{error}</p>}
           {status === "succeeded" &&
             categories.map((category) => (
-              <div key={category.id}>
+              <div key={category._id}>
                 <h3 className="text-lg font-bold mb-2">{category.name}</h3>
                 <ul className="space-y-1">
-                  {category.subcategories.map((sub) => (
-                    <li key={sub.id}>
-                      <a href={`/category/${sub.id}`} className="hover:underline text-gray-300">
+                  {category.sub_categories.map((sub) => (
+                    <li key={sub._id}>
+                      <Link
+                        to={`/${sub.name}`}
+                        className="hover:underline text-gray-300"
+                        onClick={handleSubCategoryClick} 
+                        >
                         {sub.name}
-                      </a>
+                        </Link>
+
                     </li>
                   ))}
                 </ul>
@@ -72,7 +82,7 @@ const Footer = () => {
 
       {/* Footer Bottom Text */}
       <div className="mt-8 border-t border-gray-700 pt-6 text-center text-gray-400 text-sm">
-        All rights reserved © 2024
+        All rights reserved © { new Date().getFullYear() }
       </div>
     </footer>
   );

@@ -1,23 +1,12 @@
 import { useState } from 'react';
-import { Dialog } from '@headlessui/react';
-import { XMarkIcon, StarIcon } from '@heroicons/react/20/solid';
+import {  StarIcon } from '@heroicons/react/20/solid';
 
-const product = {
-  name: 'Product Name',
-  price: '$69',
-  rating: 4.9,
-  reviewCount: 234,
-  href: '#',
-  imageSrc: 'https://tailwindui.com/plus/img/ecommerce-images/product-quick-preview-02-detail.jpg',
-  imageAlt: 'Image Alt Text',
-  description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.',
-};
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function ProductDetailsHead() {
+export default function ProductDetailsHead({ product }) {
   const [quantity, setQuantity] = useState(1);
   
   return (
@@ -48,9 +37,6 @@ export default function ProductDetailsHead() {
                     />
                   ))}
                 </div>
-                <a href="#" className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500">
-                  {product.reviewCount} reviews
-                </a>
               </div>
             </div>
           </section>

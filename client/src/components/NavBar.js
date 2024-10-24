@@ -27,12 +27,12 @@ const NavBar = () => {
 
   const handleSubCategoryClick = (sub) => {
     dispatch(selectSubCategory(sub)); // Dispatch selectSubCategory action
-  }
+  };
 
   return (
-    <div className="flex justify-between items-center bg-gray-200 p-4">
+    <nav className="flex justify-between items-center bg-gray-200 p-4">
       <div className="flex space-x-9">
-        <Link to="/" className="hover:{bg-yellow-500 text-blue-500} text-black">
+        <Link to="/" className="hover:underline text-black">
           Home
         </Link>
         <Link to="/" className="hover:underline text-black">
@@ -46,10 +46,10 @@ const NavBar = () => {
           </span>
           {status === "loading" && <Loading />}
           {status === "failed" && (
-            <div className="absolute left-0 bg-red-100 p-2">{error}</div>
+            <div className="absolute left-0 bg-red-400 p-2">{error}</div>
           )}
           {status === "succeeded" && (
-            <ul className="absolute left-0 hidden group-hover:block bg-white shadow-md rounded-md mt-2">
+            <ul className="absolute left-0 hidden group-hover:block bg-white shadow-md rounded-md">
               {categories.map((category) => (
                 <li key={category._id} className="px-4 py-2 hover:bg-gray-100">
                   <div className="relative group">
@@ -62,14 +62,14 @@ const NavBar = () => {
                     </Link>
                     {category.sub_categories &&
                       category.sub_categories.length > 0 && (
-                        <ul className="absolute left-full hidden group-hover:block bg-white shadow-md rounded-md mt-2">
+                        <ul className="absolute left-full hidden group-hover:block bg-white shadow-md rounded-md">
                           {category.sub_categories.map((sub) => (
                             <li
-                              key={sub.id}
-                              className="px-4 py-2 hover:bg-gray-100"
+                              key={sub._id}
+                              className="px-3 py-2 hover:bg-gray-200"
                             >
                               <Link
-                                to={`/categories/${category.name}/${sub.name}`} // Use subcategory name here
+                                to={`/${sub.name}`} // Use subcategory name here
                                 className="text-black"
                                 onClick={() => handleSubCategoryClick(sub)} // Handle click
                               >
@@ -101,7 +101,7 @@ const NavBar = () => {
           Sign up
         </Link>
       </div>
-    </div>
+    </nav>
   );
 };
 
