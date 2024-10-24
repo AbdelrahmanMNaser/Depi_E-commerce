@@ -5,7 +5,7 @@ import CategoryItem from "./CategoryItem";
 
 function Categories() {
   const dispatch = useDispatch();
-  const { categories, status, error } = useSelector((state) => state.categories); // Assuming the categories slice is named "categories"
+  const { categories, status, error } = useSelector((state) => state.categories); 
 
   useEffect(() => {
     if (status === "idle") {

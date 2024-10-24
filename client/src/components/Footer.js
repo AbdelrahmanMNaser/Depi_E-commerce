@@ -6,7 +6,7 @@ import { faFacebookF, faTwitter, faInstagram } from "@fortawesome/free-brands-sv
 
 const Footer = () => {
   const dispatch = useDispatch();
-  const [isFooterVisible, setIsFooterVisible] = useState(false); // State to track if footer should be visible
+  const [isFooterVisible, setIsFooterVisible] = useState(false); 
   const bottomRef = useRef(null); // Reference to the element at the bottom
 
   // Get categories from the Redux store
@@ -14,7 +14,7 @@ const Footer = () => {
 
   useEffect(() => {
     if (status === "idle") {
-      dispatch(fetchAllCategories()); // Fetch categories if they haven't been loaded yet
+      dispatch(fetchAllCategories()); 
     }
   }, [dispatch, status]);
 
@@ -27,7 +27,7 @@ const Footer = () => {
           setIsFooterVisible(false); // Hide footer when scrolling up
         }
       },
-      { threshold: 0.1 } // Trigger when 10% of the bottom element is visible
+      { threshold: 0.1 } 
     );
 
     if (bottomRef.current) {
@@ -43,7 +43,6 @@ const Footer = () => {
 
   return (
     <>
-      {/* Invisible div at the bottom of the page to trigger the footer */}
       <div ref={bottomRef} className="h-1"></div>
 
       {/* Conditionally render the footer */}
