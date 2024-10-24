@@ -9,18 +9,16 @@ import {
 } from "../redux/slices/ProductSlice";
 import { fetchReviewsByProduct } from "../redux/slices/ReviewSlice";
 
-import ProductInfo from "./../components/ProductInfo";
+import ProductInfo from "../components/ProductInfo";
 import ProductFeatures from "../components/ProductFeatures";
-import ProductSimilar from "./../components/ProductSimilar";
-import Reviews from "./../components/Reviews";
+import ProductSimilar from "../components/ProductSimilar";
+import Reviews from "../components/Reviews";
 
 const ProductDetails = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const {
     products = [],
-    status,
-    error,
   } = useSelector((state) => state.products);
   const { ProductName } = useParams();
 

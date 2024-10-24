@@ -11,7 +11,7 @@ export const login = createAsyncThunk(
   "user/login",
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const response = Axios.post("/auth/login", { email, password });
+      const response = await Axios.post("/auth/login", { email, password }); // Added await here
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -51,7 +51,7 @@ const userSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.payload; // Use action.payload to get the error message
       })
       .addCase(signup.pending, (state) => {
         state.loading = true;
@@ -63,7 +63,7 @@ const userSlice = createSlice({
       })
       .addCase(signup.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.payload; // Use action.payload to get the error message
       });
   },
 });

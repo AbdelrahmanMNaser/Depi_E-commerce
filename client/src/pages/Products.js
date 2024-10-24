@@ -46,8 +46,6 @@ function Products() {
 
   useEffect(() => {
     if (status === "succeeded") {
-      console.log("Products fetched from API:", products);
-      console.log("Applying filters:", filters);
       const filtered = products.filter((product) =>
         Object.keys(filters).every((key) => {
           if (!filters[key] || filters[key].length === 0) return true; // Skip empty filters
@@ -68,7 +66,6 @@ function Products() {
           }
         })
       );
-      console.log("Filtered products:", filtered);
       setFilteredProducts(filtered);
     }
   }, [products, filters, status]);
@@ -85,9 +82,7 @@ function Products() {
           <div className="flex flex-wrap -m-2">
             {filteredProducts.length > 0 ? (
               filteredProducts.map((product) => (
-                <Link to={`/products/${product.title}`} >
                 <ProductCard key={product._id} product={product} />
-                </Link>
               ))
             ) : (
               <div>No products available</div>

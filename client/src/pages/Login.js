@@ -16,6 +16,9 @@ const Login = () => {
       
       navigate('/');  
     }
+    else {
+      console.log('User not logged in:', user);
+    }
   }, [user, navigate]);
 
   const handleLogin = (e) => {
