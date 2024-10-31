@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { StarIcon } from "@heroicons/react/20/solid";
-import { addProductToCart } from "../redux/slices/CartSlice"; // Adjust the path as needed
+import { addProductToCart, createCart } from "../redux/slices/CartSlice"; // Adjust the path as needed
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -14,15 +14,18 @@ function ProductInfo({ product }) {
 
   const handleAddToCart = () => {
     if (cart) {
-      dispatch(
-        addProductToCart({
-          cartId: cart.id,
-          productData: { productId: product.id, quantity },
-        })
-      );
+      console.log("Adding product to existing cart:", {
+        productId: product.id,
+        quantity,
+      });
+      dispatch(addProductToCart({ productId: product._id, quantity }));
     } else {
-      // Handle case where cart is not available
-      console.error("Cart not available");
+      console.log("Creating new cart with product:", {
+        products: [{ productId: product.id, quantity }],
+      });
+      dispatch(
+        createCart({ productList: [{ productId: product._id, quantity }] })
+      );
     }
   };
 
@@ -84,15 +87,9 @@ function ProductInfo({ product }) {
             <button
               type="button"
               onClick={handleAddToCart}
-              className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="flex w-full justify-center rounded-md border border-gray-300 px-8 py-3 hover:bg-slate-200 focus:ring-2"
             >
               Add to Cart
-            </button>
-            <button
-              type="submit"
-              className="flex w-full items-center justify-center rounded-md border border-transparent bg-gray-600 px-8 py-3 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-            >
-              Buy Now
             </button>
           </div>
         </div>

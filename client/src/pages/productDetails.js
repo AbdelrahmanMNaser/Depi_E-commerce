@@ -1,65 +1,52 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { useLocation } from "react-router-dom";
-
-import {
-  fetchAllProducts,
-  fetchProductById,
-} from "../redux/slices/ProductSlice";
-import { fetchReviewsByProduct } from "../redux/slices/ReviewSlice";
 
 import ProductInfo from "../components/ProductInfo";
 import ProductFeatures from "../components/ProductFeatures";
 import ProductSimilar from "../components/ProductSimilar";
 import Reviews from "../components/Reviews";
 
+import { fetchProductById } from "../redux/slices/ProductSlice";
+import { fetchReviewsByProduct } from "../redux/slices/ReviewSlice";
+
 const ProductDetails = () => {
   const dispatch = useDispatch();
-  const location = useLocation();
-  const {
-    products = [],
-  } = useSelector((state) => state.products);
-  const { ProductName } = useParams();
+  const { products = [], status: productStatus } = useSelector((state) => state.products);
+  const reviews = useSelector((state) => state.reviews.reviews);
+  const reviewStatus = useSelector((state) => state.reviews.status);
+
+  const productId = localStorage.getItem('visitedProduct');
 
   useEffect(() => {
-    dispatch(fetchAllProducts());
-  }, [dispatch]);
-
-  const product = products.find((product) => product.title === ProductName);
-
-  useEffect(() => {
-    if (product) {
-      dispatch(fetchProductById(product._id));
+    if (productId && productStatus === 'idle') {
+      dispatch(fetchProductById(productId));
     }
-  }, [dispatch, product]);
-
-  const {
-    reviews = [],
-    reviewsStatus,
-    reviewsError,
-  } = useSelector((state) => state.reviews.reviews);
+  }, [dispatch, productId, productStatus]);
 
   useEffect(() => {
-    if (product) {
-      dispatch(fetchReviewsByProduct(product._id));
+    if (reviewStatus === 'idle' && productId) {
+      dispatch(fetchReviewsByProduct(productId));
     }
-  }, [dispatch, product]);
+  }, [dispatch, productId, reviewStatus]);
 
-  console.log("reviews", reviews);
-  
+  const product = products.find((product) => product._id === productId);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location]);
+  if (productStatus === 'loading') {
+    return <div>Loading...</div>;
+  }
+
+  if (!product) {
+    return <div>Product not found</div>;
+  }
 
   return (
-    <>
+    <div>
       <ProductInfo product={product} />
       <ProductFeatures product={product} />
-      <Reviews reviews={reviews} />
-      <ProductSimilar />
-    </>
+      <ProductSimilar productId={productId} />
+      <Reviews reviews={reviews}  />
+    </div>
   );
 };
+
 export default ProductDetails;

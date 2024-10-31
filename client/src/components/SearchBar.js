@@ -1,12 +1,16 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { fetchProductsByKeyword } from "../redux/slices/ProductSlice";
 
 const SearchBar = () => {
   const [keyword, setKeyword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
+      dispatch(fetchProductsByKeyword(keyword));
       navigate(`/search?keyword=${keyword}`);
     }
   };

@@ -6,6 +6,9 @@ const Axios = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  authorization: {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  },
 });
 
 export default Axios;

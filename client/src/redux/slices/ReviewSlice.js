@@ -27,8 +27,6 @@ export const fetchReviewsByProduct = createAsyncThunk(
   async (productId, { rejectWithValue }) => {
     try {
       const response = await Axios.get(`/reviews/products/${productId}`);
-      console.log("API response", response.data.reviews);
-      
       return response.data.reviews;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -122,9 +120,8 @@ const reviewSlice = createSlice({
       .addCase(fetchReviewsByProduct.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.reviews = action.payload;
-        
+
         console.log("Reviews from Slice", state.reviews);
-        
       })
       .addCase(fetchReviewsByProduct.rejected, (state, action) => {
         state.status = "failed";

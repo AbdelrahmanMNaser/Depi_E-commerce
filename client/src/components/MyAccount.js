@@ -1,56 +1,56 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../redux/slices/UserSlice"; // Adjust the path as necessary
+import { logout, toggleDropdown } from "../redux/slices/UserSlice";
 
 const MyAccount = () => {
-  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [isLoggingOut, setIsLoggingOut] = useState(false); // Add this state
 
-  console.log("User:", user);
+  // Extract user and dropdown state from user state
+  const { user, dropdownOpen, loading } = useSelector((state) => state.user);
+
+  console.log(user);
 
   const handleLogout = async () => {
-    setIsLoggingOut(true); // Set logging out to true before dispatching
-    await dispatch(logout()); // Wait for logout to complete
+    await dispatch(logout());
     navigate("/Log-in");
   };
 
-  useEffect(() => {
-    if (!user && !isLoggingOut) {
-      // Check isLoggingOut
-      navigate("/Log-in");
-    }
-  }, [user, navigate, isLoggingOut]); // Add isLoggingOut to dependencies
-
-  // Conditionally render based on user and isLoggingOut
-  if (isLoggingOut) {
-    return null; // Or a loading indicator: <div>Logging out...</div>
-  }
-
-  return user ? (
-    <div className="relative group">
-      <i className="fas fa-user mr-2"></i> My Account
-      <div className="absolute right-0  w-48 bg-white border rounded shadow-lg hidden group-hover:block">
-        <Link
-          to="/profile"
-          className="block px-4 py-2 text-black hover:bg-gray-200"
-        >
-          Profile
-        </Link>
-        <button
-          onClick={handleLogout}
-          className="block w-full text-left px-4 py-2 text-black hover:bg-gray-200"
-        >
-          Log Out
-        </button>
-      </div>
+  return (
+    <div>
+      {user ? (
+        <div className="relative inline-block text-left dropdown">
+          <button
+            onClick={() => dispatch(toggleDropdown())}
+            className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Welcome, {user.name}
+          </button>
+          {dropdownOpen && (
+            <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+              <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                  Profile
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  role="menuitem"
+                  disabled={loading}
+                >
+                  {loading ? "Logging out..." : "Log Out"}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div>
+          <Link to="/Log-in">Log In</Link>
+        </div>
+      )}
     </div>
-  ) : (
-    <Link to="/Log-in" className="flex items-center text-black">
-      <i className="fas fa-sign-in-alt mr-2"></i> Log In
-    </Link>
   );
 };
 

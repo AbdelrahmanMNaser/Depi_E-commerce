@@ -43,12 +43,14 @@ const Carousel = () => {
       <button
         onClick={prevImage}
         className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800 text-white px-4 py-2 rounded-full shadow-lg opacity-75 hover:opacity-100 hover:bg-gray-700 transition-all duration-300"
+        aria-label="Previous Slide"
       >
         &#8249;
       </button>
       <button
         onClick={nextImage}
         className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800 text-white px-4 py-2 rounded-full shadow-lg opacity-75 hover:opacity-100 hover:bg-gray-700 transition-all duration-300"
+        aria-label="Next Slide"
       >
         &#8250;
       </button>
@@ -64,6 +66,7 @@ const Carousel = () => {
                 : "bg-gray-400 opacity-50 hover:opacity-100"
             } transition-opacity duration-300`}
             onClick={() => setCurrentImage(index)}
+            aria-label={`Go to slide ${index + 1}`}
           ></div>
         ))}
       </div>
