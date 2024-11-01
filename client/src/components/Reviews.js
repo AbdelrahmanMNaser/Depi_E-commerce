@@ -1,7 +1,7 @@
+// Reviews.js
 import React from 'react';
 
-const Reviews = ({reviews}) => {
-
+const Reviews = ({ reviews }) => {
   const calculateRatingDistribution = () => {
     const totalReviews = reviews.length;
     const distribution = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
@@ -19,7 +19,6 @@ const Reviews = ({reviews}) => {
   };
 
   const ratingDistribution = calculateRatingDistribution();
-
 
   return (
     <div className="max-w-6xl mx-auto p-6">
@@ -48,8 +47,9 @@ const Reviews = ({reviews}) => {
         <div className="w-2/3 space-y-6">
           {reviews.map((review, index) => (
             <div key={index} className="bg-white shadow rounded-lg p-4">
-              <div className="mb-2">
-                <h3 className="text-lg font-bold">{review.user}</h3>
+              <div className="mb-2">                
+                <h4 className="text-sm font-semibold text-gray-600">{review.user.name}</h4> {/* Decrease username size */}
+                <h3 className="text-xl font-bold text-gray-800">{review.reviewTitle}</h3> {/* Increase reviewTitle size */}
                 <div className="flex items-center">
                   {Array(review.rating)
                     .fill(0)
@@ -59,9 +59,10 @@ const Reviews = ({reviews}) => {
                       </svg>
                     ))}
                 </div>
-              </div>
               <p className="text-gray-700">{review.reviewText}</p>
-            </div>
+            </div>             
+             </div>
+
           ))}
         </div>
       </div>

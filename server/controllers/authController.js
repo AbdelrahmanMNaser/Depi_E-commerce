@@ -25,7 +25,7 @@ const signup = async (req, res, next) => {
     const token = generateToken(user._id, user.role);
     console.log(token);
 
-    res.status(201).json({ token, role: user.role });
+    res.status(201).json({ token, role: user.role, name: user.name });
   } catch (error) {
     next(error);
   }
@@ -49,7 +49,7 @@ const login = async (req, res, next) => {
     }
 
     const token = generateToken(user._id, user.role);
-    res.status(200).json({ token, role: user.role });
+    res.status(200).json({ token, id: user._id, role: user.role, name: user.name, email: user.email });
   } catch (error) {
     next(error);
   }
@@ -77,4 +77,4 @@ const resetPassword = async (req, res) => {
   }
 };
 
-module.exports = { signup, login };
+module.exports = { signup, login, resetPassword };

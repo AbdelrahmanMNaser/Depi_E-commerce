@@ -1,8 +1,10 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 
 function CategoryItem({ category }) {
   return (
     <div className="flex flex-col items-center m-4">
+      <Link to={`/${category.name}`}>
       <div className="w-32 h-32 rounded-full overflow-hidden flex items-center justify-center bg-gray-200">
         <img
           src={category.imageURL}
@@ -11,6 +13,7 @@ function CategoryItem({ category }) {
         />
       </div>
       <h2 className="mt-4 text-lg font-semibold">{category.name}</h2>
+      </Link>
     </div>
   );
 }

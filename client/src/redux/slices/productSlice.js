@@ -5,6 +5,7 @@ import Axios from "../../axiosConfig";
 const initialState = {
   products: [],
   product: null,
+  filters: {},
   status: "idle",
   error: null,
 };
@@ -58,6 +59,21 @@ export const fetchProductsByCategory = createAsyncThunk(
   }
 );
 
+export const fetchProductsByKeyword = createAsyncThunk(
+  "products/fetchByKeyword",
+  async (keyword, { rejectWithValue }) => {
+    try {
+      console.log("Fetching products by keyword:", keyword);
+      const response = await Axios.get(`/search?keyword=${keyword}`);
+      console.log("Response from API:", response.data);
+      return response.data.products;
+    } catch (error) {
+      console.error("Error fetching products by keyword:", error);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const createProduct = createAsyncThunk(
   "products/create",
   async (product, { rejectWithValue }) => {
@@ -103,6 +119,9 @@ const productSlice = createSlice({
       state.products = [];
       state.status = "idle";
       state.error = null;
+    },
+    setFilters: (state, action) => {
+      state.filters = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -208,6 +227,6 @@ const productSlice = createSlice({
   },
 });
 
-export const { resetProductsState } = productSlice.actions; // Export the reset action
+export const { resetProductsState, setFilters } = productSlice.actions; // Export the reset action
 
 export default productSlice.reducer;

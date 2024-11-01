@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import CartProductList from './CartProductList';
-import CartSummary from './CartSummary';
+import CartProductList from '../components/CartProductList';
+import CartSummary from '../components/CartSummary';
 
-const CartPage = () => {
+const Cart = () => {
   const [cartItems, setCartItems] = useState([
     { id: 1, name: 'Product 1', price: 50, quantity: 1, image: '/path/to/image1.jpg' },
     { id: 2, name: 'Product 2', price: 30, quantity: 2, image: '/path/to/image2.jpg' },
@@ -43,4 +43,4 @@ const CartPage = () => {
   );
 };
 
-export default CartPage;
+export default Cart;
