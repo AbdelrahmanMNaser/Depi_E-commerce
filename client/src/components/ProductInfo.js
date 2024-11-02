@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { addProductToCart, createCart } from "../redux/slices/CartSlice"; // Adjust the path as needed
+import ProductImageGallery from "./ProductImageGallery"; // Import the new component
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -15,13 +16,13 @@ function ProductInfo({ product }) {
   const handleAddToCart = () => {
     if (cart) {
       console.log("Adding product to existing cart:", {
-        productId: product.id,
+        productId: product._id,
         quantity,
       });
       dispatch(addProductToCart({ productId: product._id, quantity }));
     } else {
       console.log("Creating new cart with product:", {
-        products: [{ productId: product.id, quantity }],
+        products: [{ productId: product._id, quantity }],
       });
       dispatch(
         createCart({ productList: [{ productId: product._id, quantity }] })
@@ -32,13 +33,7 @@ function ProductInfo({ product }) {
   return (
     <div className="top-0 inset-x-0 flex items-start justify-center mt-4">
       <div className="flex w-full max-w-6xl justify-center">
-        <div className="flex-shrink-0 overflow-hidden rounded-lg bg-gray-100 h-100 w-80">
-          <img
-            alt={product.title}
-            src={product.imageURLs[0]}
-            className="object-cover object-center w-full h-full"
-          />
-        </div>
+        <ProductImageGallery imageURLs={product.imageURLs} title={product.title} />
         <div className="flex flex-col justify-center p-4 w-1/2 mx-auto">
           <h2 className="text-4xl font-bold text-gray-900">{product.title}</h2>
           <section aria-labelledby="information-heading" className="mt-2">
@@ -87,7 +82,7 @@ function ProductInfo({ product }) {
             <button
               type="button"
               onClick={handleAddToCart}
-              className="flex w-full justify-center rounded-md border border-gray-300 px-8 py-3 hover:bg-slate-200 focus:ring-2"
+              className="flex w-full justify-center rounded-md border border-gray-300 px-2 py-3 hover:border-black focus:ring-2"
             >
               Add to Cart
             </button>

@@ -110,7 +110,7 @@ function Products() {
         {status === "loading" && <Loading />}
         {status === "failed" && <div className="text-red-500">{error}</div>}
         {status === "succeeded" && (
-          <div className="flex flex-wrap -m-2">
+          <div className="flex flex-wrap m-2">
             {filteredProducts.length > 0 ? (
               filteredProducts.map((product) => (
                 <ProductCard key={product._id} product={product} />
