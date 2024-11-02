@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function ProductCard({ product }) {
   const handleProductClick = () => {
-    localStorage.setItem('visitedProduct', product._id);
+    localStorage.setItem("visitedProduct", product._id);
   };
 
   return (
@@ -15,9 +15,9 @@ function ProductCard({ product }) {
       >
         <div className="bg-white rounded-lg shadow-md overflow-hidden transition duration-300 ease-in-out transform hover:scale-105">
           <img
-            src={product.imageURLs[0]}
+            src={product.imageURLs && product.imageURLs[0]? product.imageURLs[0] : "https://www.svgrepo.com/show/508699/landscape-placeholder.svg" }
             alt={product.title}
-            className="w-full h-48 sm:h-56 md:h-64 lg:h-72 xl:h-80"
+            className="w-full h-48 sm:h-56 md:h-64 lg:h-72 xl:h-80 object-cover"
           />
           <div className="p-4">
             <h2 className="font-bold text-lg mb-2 line-clamp-2">
@@ -31,9 +31,6 @@ function ProductCard({ product }) {
                 ${product.unitPrice}
               </p>
             </div>
-            <button className="px-4 py-2 rounded w-full mt-2 hover:bg-slate-200 border border-gray-300">
-              Add to Cart
-            </button>
           </div>
         </div>
       </Link>

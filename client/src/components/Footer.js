@@ -4,6 +4,8 @@ import { fetchAllCategories, selectSubCategory } from "../redux/slices/Categorie
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebookF, faTwitter, faInstagram } from "@fortawesome/free-brands-svg-icons";
 import { Link } from "react-router-dom";
+import Logo from "./Logo";
+
 
 const Footer = () => {
   const dispatch = useDispatch();
@@ -26,7 +28,7 @@ const Footer = () => {
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 px-4 md:px-0">
         {/* Logo */}
         <div className="text-center md:text-left">
-          <img src="/logo.png" alt="Logo" className="w-32 h-auto mx-auto md:mx-0 mb-4" />
+          <Logo />
           <p className="text-gray-400 text-sm">
             Your trusted e-commerce platform for all your needs.
           </p>

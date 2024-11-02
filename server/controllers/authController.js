@@ -23,7 +23,6 @@ const signup = async (req, res, next) => {
     await user.save();
 
     const token = generateToken(user._id, user.role);
-    console.log(token);
 
     res.status(201).json({ token, role: user.role, name: user.name });
   } catch (error) {
