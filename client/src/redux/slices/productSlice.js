@@ -28,7 +28,7 @@ export const fetchProductById = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await Axios.get(`/products/${id}`);
-      return response.data;
+      return response.data.product;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -175,6 +175,19 @@ const productSlice = createSlice({
         state.products = action.payload;
       })
       .addCase(fetchProductsByCategory.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || action.error.message;
+      })
+
+      // Fetch products by keyword
+      .addCase(fetchProductsByKeyword.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchProductsByKeyword.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.products = action.payload;
+      })
+      .addCase(fetchProductsByKeyword.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || action.error.message;
       })

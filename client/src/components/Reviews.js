@@ -1,25 +1,33 @@
-// Reviews.js
 import React from 'react';
 
 const Reviews = ({ reviews }) => {
   const calculateRatingDistribution = () => {
     const totalReviews = reviews.length;
     const distribution = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-
-    reviews.forEach(review => {
-      distribution[review.rating] += 1;
-    });
-
-    // Convert counts to percentages
-    for (let rating in distribution) {
-      distribution[rating] = (distribution[rating] / totalReviews) * 100;
+  
+    // If no reviews, return all zeros to avoid NaN
+    if (totalReviews === 0) {
+      return distribution;
     }
-
+  
+    reviews.forEach(review => {
+      // Ensure rating is valid (1-5)
+      const rating = Math.min(Math.max(Math.round(review.rating), 1), 5);
+      distribution[rating] += 1;
+    });
+  
+    // Convert counts to percentages, avoiding division by zero
+    for (let rating in distribution) {
+      distribution[rating] = totalReviews > 0 
+        ? (distribution[rating] / totalReviews) * 100 
+        : 0;
+    }
+  
     return distribution;
   };
-
+  
   const ratingDistribution = calculateRatingDistribution();
-
+  
   return (
     <div className="max-w-6xl mx-auto p-6">
       <h2 className="text-2xl font-bold mb-6">Customer Reviews</h2>
@@ -37,7 +45,7 @@ const Reviews = ({ reviews }) => {
                     style={{ width: `${ratingDistribution[star]}%` }}
                   />
                 </div>
-                <span className="text-gray-500">{ratingDistribution[star].toFixed(2)}%</span>
+                <span className="text-gray-500">{ratingDistribution[star]}%</span>
               </div>
             ))}
           </div>

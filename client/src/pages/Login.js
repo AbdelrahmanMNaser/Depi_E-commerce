@@ -1,68 +1,63 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
-import { login } from '../redux/slices/UserSlice';
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { login, clearError } from "../redux/slices/UserSlice";
+import Label from "./../components/ui/Label";
+import Input from "./../components/ui/Input";
+import { Link } from "react-router-dom";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
   const { loading, error, user } = useSelector((state) => state.user);
-  
-  const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
-      console.log('User logged in:', user);
-      
-      navigate('/');  
-    }
-    else {
-      console.log('User not logged in:', user);
-    }
-  }, [user, navigate]);
+    dispatch(clearError());
+  }, [dispatch]);
 
   const handleLogin = (e) => {
     e.preventDefault();
-    dispatch(login({ email, password }));
+    try {
+      dispatch(login({ email, password }));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full">
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            {error}
+          </div>
+        )}
         <h2 className="text-2xl font-bold mb-6 text-center">Log In</h2>
-        
         <form onSubmit={handleLogin}>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-              Email Address
-            </label>
-            <input
+          <div className="mb-4 group">
+            <Label id="email" text="Email Address" />
+            <Input
               id="email"
               type="email"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              autoFocus = {true}
+              required = {true}
             />
           </div>
 
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-              Password
-            </label>
-            <input
+          <div className="mb-6 group">
+            <Label id="password" text="Password" />
+            <Input
               id="password"
               type="password"
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              required = {true}
             />
-            <p className="text-xs text-gray-600 mt-1">
-              It must be a combination of minimum 8 letters, numbers, and symbols.
-            </p>
           </div>
 
           <div className="flex items-center justify-between mb-6">
@@ -70,7 +65,10 @@ const Login = () => {
               <input type="checkbox" className="mr-2 leading-tight" />
               <span className="text-sm text-gray-700">Remember me</span>
             </label>
-            <a href="/forgot-password" className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+            <a
+              href="/forgot-password"
+              className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+            >
               Forgot Password?
             </a>
           </div>
@@ -81,16 +79,15 @@ const Login = () => {
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline"
               disabled={loading}
             >
-              {loading ? 'Logging in...' : 'Log In'}
+              {loading ? "Logging in..." : "Log In"}
             </button>
           </div>
         </form>
-
         <div className="mt-6">
           <div className="flex justify-center space-x-4">
-            <a 
-              href="https://accounts.google.com/InteractiveLogin" 
-              className="flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded w-full"
+            <a
+              href="https://accounts.google.com/InteractiveLogin"
+              className="flex items-center justify-center  hover:bg-gray-100 text-gray-800 font-bold py-2 px-4 rounded w-full"
             >
               <img
                 src="https://img.icons8.com/?size=100&id=17949&format=png&color=000000"
@@ -100,9 +97,9 @@ const Login = () => {
               Log in with Google
             </a>
 
-            <a 
+            <a
               href="https://account.apple.com/sign-in"
-              className="flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded w-full"
+              className="flex items-center justify-center  hover:bg-gray-100 text-gray-800 font-bold py-2 px-4 rounded w-full"
             >
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
@@ -113,14 +110,14 @@ const Login = () => {
             </a>
           </div>
         </div>
-
         <div className="text-center mt-6">
-          <p className="text-sm">
-            No account yet? <Link to="/Sign-up" className="text-blue-500 hover:text-blue-800">Sign up</Link>
+          <p className="text">
+            No account yet?{" "}
+            <Link to="/Sign-up" className="text-blue-500 hover:text-blue-800">
+              Sign up
+            </Link>
           </p>
-        </div>
-
-        {error && <p className="text-red-500 text-center mt-4">{error}</p>}
+        </div>{" "}
       </div>
     </div>
   );

@@ -1,53 +1,54 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import Label from "./../components/ui/Label";
+import Input from "../components/ui/Input";
 
-const { signup } = require('../redux/slices/UserSlice');
+const { signup } = require("../redux/slices/UserSlice");
 
 const Signup = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSignup = (e) => {
     e.preventDefault();
-    setError(''); // Clear previous errors
+    setError(""); // Clear previous errors
     if (!name) {
-      setError('Name is required');
+      setError("Name is required");
       return;
     }
     if (!email) {
-      setError('Email is required');
+      setError("Email is required");
       return;
     }
     // Simple regex for email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setError('Please enter a valid email');
+      setError("Please enter a valid email");
       return;
     }
     if (!password) {
-      setError('Password is required');
+      setError("Password is required");
       return;
     }
     if (password.length < 6) {
-      setError('Password must be at least 6 characters');
+      setError("Password must be at least 6 characters");
       return;
     }
 
     setLoading(true);
 
     // Send signup request to the server by slice
-    
-    dispatch(signup({ name, email, password }));
-    
-    navigate('/')
 
+    dispatch(signup({ name, email, password }));
+
+    navigate("/");
   };
 
   return (
@@ -56,36 +57,37 @@ const Signup = () => {
         <h2 className="text-2xl font-bold mb-6">Signup</h2>
         <form onSubmit={handleSignup}>
           <div className="mb-4">
-            <label className="block text-gray-700">Name</label>
-            <input
+            <Label text={"Name"} id={"name"} />
+            <Input
+              id={"name"}
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Name"
-              required
+              placeholder="Enter your Full Name"
+              autoFocus={true}
+              required={true}
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Email</label>
-            <input
+            <Label text={"Email"} id={"email"} />
+            <Input
+              id={"email"}
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Email"
-              required
+              placeholder="Enter your Email"
+              required={true}
             />
           </div>
           <div className="mb-6">
-            <label className="block text-gray-700">Password</label>
-            <input
+            <Label text={"Password"} id={"password"} />
+            <Input
+              id={"password"}
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Password"
-              required
+              placeholder="Enter your Password"
+              required={true}
             />
           </div>
           <button
@@ -99,9 +101,9 @@ const Signup = () => {
         </form>
         <div className="mt-6">
           <div className="flex justify-center space-x-4">
-            <a 
-              href="https://accounts.google.com/InteractiveLogin" 
-              className="flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded w-full"
+            <a
+              href="https://accounts.google.com/InteractiveLogin"
+              className="flex items-center justify-center hover:bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded w-full"
             >
               <img
                 src="https://img.icons8.com/?size=100&id=17949&format=png&color=000000"
@@ -111,11 +113,11 @@ const Signup = () => {
               Log in with Google
             </a>
 
-            <a 
+            <a
               href="https://account.apple.com/sign-in"
-              className="flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded w-full"
+              className="flex items-center justify-center hover:bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded w-full"
             >
-               <img
+              <img
                 src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
                 alt="Apple logo"
                 className="w-5 h-5 mr-2"
