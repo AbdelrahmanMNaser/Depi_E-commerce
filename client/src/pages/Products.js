@@ -37,10 +37,10 @@ function Products() {
   const categoryId = category?._id;
 
   useEffect(() => {
-    dispatch(resetProductsState());
     if (keyword) {
       dispatch(fetchProductsByKeyword(keyword));
-    } else if (categoryId) {
+    } else if (categoryId) {    
+
       dispatch(fetchProductsByCategory(categoryId));
     } else {
       dispatch(fetchAllProducts());

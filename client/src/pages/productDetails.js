@@ -8,31 +8,29 @@ import Reviews from "../components/Reviews";
 
 import { fetchProductById } from "../redux/slices/ProductSlice";
 import { fetchReviewsByProduct } from "../redux/slices/ReviewSlice";
+import Loading from './../components/Loading';
 
 const ProductDetails = () => {
   const dispatch = useDispatch();
-  const { products = [], status: productStatus } = useSelector((state) => state.products);
-  const reviews = useSelector((state) => state.reviews.reviews);
-  const reviewStatus = useSelector((state) => state.reviews.status);
-
+  const { product, status: productStatus } = useSelector((state) => state.products);
   const productId = localStorage.getItem('visitedProduct');
+  const reviews = useSelector((state) => state.reviews.reviews);
 
   useEffect(() => {
-    if (productId && productStatus === 'idle') {
+    if (productId) {
       dispatch(fetchProductById(productId));
     }
-  }, [dispatch, productId, productStatus]);
+  }, [dispatch, productId]);
 
   useEffect(() => {
-    if (reviewStatus === 'idle' && productId) {
+    if (productId) {
       dispatch(fetchReviewsByProduct(productId));
     }
-  }, [dispatch, productId, reviewStatus]);
+  }, [dispatch, productId]);  
 
-  const product = products.find((product) => product._id === productId);
 
   if (productStatus === 'loading') {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   if (!product) {

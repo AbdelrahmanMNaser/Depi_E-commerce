@@ -53,6 +53,9 @@ const userSlice = createSlice({
       state.user = null;
       localStorage.removeItem('user');
     },
+    clearError: (state) => {
+      state.error = null;
+    },
     toggleDropdown: (state) => {
       state.dropdownOpen = !state.dropdownOpen;
     },
@@ -101,5 +104,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { logout, toggleDropdown } = userSlice.actions;
+export const { logout, clearError, toggleDropdown } = userSlice.actions;
 export default userSlice.reducer;

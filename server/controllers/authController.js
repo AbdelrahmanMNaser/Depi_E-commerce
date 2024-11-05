@@ -38,17 +38,25 @@ const login = async (req, res, next) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(404).json({ message: "Invalid credentials" });
+      return res.status(404).json("Account Doesn't exists");
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json("Wrong Password, please try again");
     }
 
     const token = generateToken(user._id, user.role);
-    res.status(200).json({ token, id: user._id, role: user.role, name: user.name, email: user.email });
+    res
+      .status(200)
+      .json({
+        token,
+        id: user._id,
+        role: user.role,
+        name: user.name,
+        email: user.email,
+      });
   } catch (error) {
     next(error);
   }

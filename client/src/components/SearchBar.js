@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchProductsByKeyword } from "../redux/slices/ProductSlice";
+import Input from "./ui/Input";
 
 const SearchBar = () => {
   const [keyword, setKeyword] = useState("");
@@ -17,10 +18,9 @@ const SearchBar = () => {
 
   return (
     <div className="w-full md:w-1/2 px-4 py-2">
-      <input
+      <Input
         type="text"
         placeholder="Search products..."
-        className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
         onKeyDown={handleKeyDown}
