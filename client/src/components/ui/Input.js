@@ -9,6 +9,7 @@ transition-all`;
 
 const Input = ({
   id,
+  name,
   type = "text",
   placeholder,
   value,
@@ -22,6 +23,7 @@ const Input = ({
     <>
       <input
         id={id}
+        name={name}
         type={type}
         placeholder={placeholder}
         value={value}
