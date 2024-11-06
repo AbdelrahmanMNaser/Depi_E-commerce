@@ -11,7 +11,6 @@ import {
 const NavBar = () => {
   const dispatch = useDispatch();
   const { categories, status, error } = useSelector((state) => state.categories);
-  const { dropdownOpen } = useSelector((state) => state.user);
   const [hoveredCategory, setHoveredCategory] = useState(null);
 
   useEffect(() => {
@@ -38,7 +37,6 @@ const NavBar = () => {
   };
 
   return (
-    !dropdownOpen && (
       <nav className="flex justify-between items-center bg-gray-200 p-4 relative">
         {/* Overlay for dimming the page */}
         <div className="overlay fixed inset-0 bg-black opacity-0 pointer-events-none transition-opacity duration-300 z-40"></div>
@@ -112,8 +110,7 @@ const NavBar = () => {
           </div>
         </div>
       </nav>
-    )
-  );
+    );
 };
 
 export default NavBar;

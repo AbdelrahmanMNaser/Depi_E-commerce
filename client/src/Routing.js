@@ -18,8 +18,8 @@ const Routing = () => {
       <Route path="/search" element={<Products />} />
       <Route path="/:CategoryName" element={<Products />} />
       <Route path="/:SubCategoryName" element={<Products />} />
-      <Route path="/Sign-up" element={<Signup />} />
-      <Route path="/Log-in" element={<LoginPage />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/profile" element={<Profile />} />

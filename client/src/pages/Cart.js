@@ -14,10 +14,17 @@ const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { cart, productDetails, status } = useSelector((state) => state.cart);
+  const { user } = useSelector((state) => state.user);
 
   const handleCheckout = () => {
-    navigate("/checkout");
-  }
+    if (user) {
+      navigate("/checkout");
+    } else {
+      // Store intent to checkout in sessionStorage
+      sessionStorage.setItem("checkoutIntent", "true");
+      navigate("/login");
+    }
+  };
 
   useEffect(() => {
     const fetchProductDetails = async () => {

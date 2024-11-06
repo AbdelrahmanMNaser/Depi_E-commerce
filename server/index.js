@@ -11,7 +11,6 @@ const categoryRouter = require("./routes/categoryRoutes");
 const brandRouter = require("./routes/brandRoutes");
 const productRouter = require("./routes/productRoutes");
 const reviewRouter = require("./routes/reviewRoutes");
-const cartRouter = require("./routes/cartRoutes");
 const OrderRouter = require("./routes/orderRoutes");
 const searchRouter = require("./routes/searchRoute");
 
@@ -46,7 +45,6 @@ try {
   app.use("/api/brands", brandRouter);
   app.use("/api/users", userRouter);
   app.use("/api/reviews", reviewRouter);
-  app.use("/api/carts", cartRouter);
   app.use("/api/orders", OrderRouter);
   app.use("/api/auth", authRouter);
   app.use("/api/search", searchRouter);

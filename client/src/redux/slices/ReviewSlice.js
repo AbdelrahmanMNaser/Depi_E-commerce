@@ -120,8 +120,6 @@ const reviewSlice = createSlice({
       .addCase(fetchReviewsByProduct.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.reviews = action.payload;
-
-        console.log("Reviews from Slice", state.reviews);
       })
       .addCase(fetchReviewsByProduct.rejected, (state, action) => {
         state.status = "failed";
