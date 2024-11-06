@@ -3,18 +3,38 @@ import { useDispatch, useSelector } from "react-redux";
 import { login, clearError } from "../redux/slices/UserSlice";
 import Label from "./../components/ui/Label";
 import Input from "./../components/ui/Input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
+  
   const { loading, error, user } = useSelector((state) => state.user);
+
+  const navigate = useNavigate();
+  const [showCheckoutMessage, setShowCheckoutMessage] = useState(false);
+  
+    useEffect(() => {
+    const checkoutIntent = sessionStorage.getItem("checkoutIntent");
+    
+    if (checkoutIntent) {
+      setShowCheckoutMessage(true);
+      
+      // Navigate to checkout if user is already logged in
+      if (user) {
+        sessionStorage.removeItem("checkoutIntent");
+        navigate("/checkout");
+      }
+    }
+  }, [user, navigate]);
 
   useEffect(() => {
     dispatch(clearError());
   }, [dispatch]);
+
+
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -28,6 +48,11 @@ const Login = () => {
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full">
+      {showCheckoutMessage && (
+          <div className="mb-4 p-3 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded">
+            Please login to complete your order
+          </div>
+        )}
         {error && (
           <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
             {error}
@@ -113,7 +138,7 @@ const Login = () => {
         <div className="text-center mt-6">
           <p className="text">
             No account yet?{" "}
-            <Link to="/Sign-up" className="text-blue-500 hover:text-blue-800">
+            <Link to="/signup" className="text-blue-500 hover:text-blue-800">
               Sign up
             </Link>
           </p>

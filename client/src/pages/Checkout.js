@@ -3,10 +3,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { deleteCart } from "../redux/slices/CartSlice";
 import { useNavigate } from "react-router-dom";
 import CheckoutSummary from "../components/CheckoutSummary";
+import { createOrder } from './../redux/slices/OrderSlice';
+import Input from './../components/ui/Input';
+import Label from './../components/ui/Label';
 
 const CheckoutPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const {user} = useSelector((state) => state.user);
+
+
   const [userInfo, setUserInfo] = useState({
     city: "",
     street: "",
@@ -41,16 +48,25 @@ const CheckoutPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const order = {
-        items: productDetails,
-        total: cartTotal,
+      const orderData = {
+        userId: user.id,
+        productList: productDetails.map(item => ({
+          product: item._id,
+          quantity: item.quantity
+        })
+        ),
+        totalPrice: cartTotal,
         shippingAddress: {
           street: userInfo.street,
           city: userInfo.city,
         },
         paymentMethod: userInfo.paymentMethod,
-        cardType: userInfo.cardType,
       };
+
+      console.log("Order Data in Client: " + JSON.stringify(orderData));
+      
+
+      await dispatch(createOrder(orderData));
 
       // Clear cart first
       await dispatch(deleteCart()).unwrap();
@@ -83,32 +99,30 @@ const CheckoutPage = () => {
               Shipping Address
             </h2>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                City
-              </label>
-              <input
+              <Label text={"City"} id={"city"} />
+              <Input
+              id={"city"}
                 type="text"
                 name="city"
                 value={userInfo.city}
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Enter your city"
-                required
+                required = {true}
               />
             </div>
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Street Address
-                </label>
+                <Label text={"Street"} id={"street"} />
                 <input
+                id={"street"}
                   type="text"
                   name="street"
                   value={userInfo.street}
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Enter your street address"
-                  required
+                  required = {true}
                 />
               </div>
 
@@ -142,7 +156,7 @@ const CheckoutPage = () => {
                 </div>
               </div>
 
-              {userInfo.paymentMethod === "CreditCard" && (
+              {userInfo.paymentMethod === "Credit Card" && (
                 <div className="card-types">
                   <h3 className="text-lg font-medium text-gray-800 mb-3">
                     Card Type

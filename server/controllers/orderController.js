@@ -1,5 +1,4 @@
 const Order = require("../models/orderModel");
-const Cart = require("../models/cartModel");
 const Product = require("../models/productModel");
 
 /* <---------------------------- POST APIs --------------------------> */
@@ -7,29 +6,15 @@ const Product = require("../models/productModel");
 // @desc    Create an order
 const createOrder = async (req, res, next) => {
   try {
-    const { userId } = req.body;
-    
-    const cart = await Cart.findOne({ userId: userId });
-    
-    const order = new Order({
-      userId: userId,
-      productList: cart.productList,
-      totalPrice: cart.totalPrice,
-      totalPriceAfterTax: cart.totalPriceAfterTax,
-      shippingAddress: req.body.shippingAddress,
-      paymentMethod: req.body.paymentMethod,
-    });
-
+    const order = new Order(req.body);
     await order.save();
 
-    await Cart.findByIdAndDelete(cart._id);
-
-    for (let product of cart.productList) {
+    for (let product of order.productList) {
       await Product.findByIdAndUpdate(product.product, {
         $inc: { stock: -product.quantity },
       });
-    };
-    
+    }
+
     res.status(201).json({ message: "Order created successfully", order });
   } catch (error) {
     next(error);
@@ -41,23 +26,21 @@ const createOrder = async (req, res, next) => {
 // @desc    Get all orders
 const getAllOrders = async (req, res, next) => {
   try {
-    const orders = await Order.find()
-      .populate({
-        path: "productList.product",
-        populate: [
-          {
-            path: "category",
-          },
-          {
-            path: "brand",
-          },
-          {
-            path: "vendor",
-            select: "name",
-          }
-        ]
-
-      });
+    const orders = await Order.find().populate({
+      path: "productList.product",
+      populate: [
+        {
+          path: "category",
+        },
+        {
+          path: "brand",
+        },
+        {
+          path: "vendor",
+          select: "name",
+        },
+      ],
+    });
     res.status(200).json({ message: "All orders", orders });
   } catch (error) {
     next(error);
@@ -68,8 +51,7 @@ const getAllOrders = async (req, res, next) => {
 const getOrdersByUser = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const orders = await Order.find({ userId: id })
-    .populate({
+    const orders = await Order.find({ userId: id }).populate({
       path: "productList.product",
       select: "title unitPrice vendor category brand",
     });
@@ -79,7 +61,6 @@ const getOrdersByUser = async (req, res, next) => {
     next(error);
   }
 };
-
 
 // @desc    Get orders by status
 const getOrdersByStatus = async (req, res, next) => {

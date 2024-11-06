@@ -23,11 +23,14 @@ const OrderSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    totalPriceAfterTax: {
-      type: Number,
-      required: true,
-    },
+
     shippingAddress: {
+      city: {
+        type: String,
+      },
+      street: {
+        type: String,
+      },
       country: {
         type: String,
         default: function () {
@@ -35,12 +38,6 @@ const OrderSchema = new mongoose.Schema(
             Intl.DateTimeFormat().resolvedOptions().timeZone
           );
         },
-      },
-      city: {
-        type: String,
-      },
-      street: {
-        type: String,
       },
     },
     paymentMethod: {
@@ -50,17 +47,14 @@ const OrderSchema = new mongoose.Schema(
     paymentStatus: {
       type: String,
       default: "Pending",
-      enum : ["Pending", "Paid", "Failed"]
+      enum: ["Pending", "Paid", "Failed"],
     },
     shipmentStatus: {
       type: String,
       required: true,
       default: "Pending",
-      enum : ["Pending", "Shipped", "Delivered", "Cancelled"]
+      enum: ["Pending", "Shipped", "Delivered", "Cancelled"],
     },
-  },
-  {
-    timestamps: true,
   }
 );
 

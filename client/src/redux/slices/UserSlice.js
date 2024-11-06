@@ -4,8 +4,7 @@ import Axios from "../../axiosConfig";
 const initialState = {
   user: JSON.parse(localStorage.getItem('user')) || null,
   loading: false,
-  error: null,
-  dropdownOpen: false,
+  error: null
 };
 
 export const login = createAsyncThunk(
@@ -55,10 +54,7 @@ const userSlice = createSlice({
     },
     clearError: (state) => {
       state.error = null;
-    },
-    toggleDropdown: (state) => {
-      state.dropdownOpen = !state.dropdownOpen;
-    },
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -104,5 +100,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { logout, clearError, toggleDropdown } = userSlice.actions;
+export const { logout, clearError } = userSlice.actions;
 export default userSlice.reducer;

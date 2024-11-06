@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams, useLocation} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  resetProductsState,
   fetchAllProducts,
   fetchProductsByCategory,
   fetchProductsByKeyword,
